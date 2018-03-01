@@ -1,0 +1,39 @@
+{
+  "name": "nodejrestapi",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "cross-env NODE_ENV=development node src/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ducchungtx/nodejs-rest-api-full.git"
+  },
+  "keywords": [
+    "nodejs",
+    "express",
+    "rest",
+    "api",
+    "authentication",
+    "jwt"
+  ],
+  "author": "Chung Nguyen",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ducchungtx/nodejs-rest-api-full/issues"
+  },
+  "homepage": "https://github.com/ducchungtx/nodejs-rest-api-full#readme",
+  "dependencies": {
+    "cross-env": "^5.1.3",
+    "express": "^4.16.2"
+  },
+  "devDependencies": {
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.3",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
+    "babel-preset-env": "^1.6.1",
+    "webpack": "^4.0.1",
+    "webpack-node-externals": "^1.6.0"
+  }
+}
