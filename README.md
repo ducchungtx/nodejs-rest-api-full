@@ -1,7 +1,7 @@
 # Cấu hình dự án
-### 1. Setup enviroment
-* Cài đặt nodemon nếu ban đầu chưa có
-npm install -g nodemon
+## 1. Setup enviroment
+* Cài đặt nodemon nếu ban đầu chưa có npm install -g nodemon
+
 Thư viện:
 yarn add
 - cross-env
@@ -13,7 +13,7 @@ yarn add -D
 * yarn add -D webpack babel-core babel-loader webpack-node-externals
 * Tạo mới file webpack.config.js
 
-### 2. Setup middlewares and mongodb
+## 2. Setup middlewares and mongodb
 
 yarn add mongoose body-parser compression helmet
 yarn add -D morgan
@@ -25,3 +25,10 @@ yarn dev:build
 yarn dev
 
 setup config folder, constants
+
+## 3. Users creation
+### Create the user modal, controller and routes
+
+### Install Robomongo, Postman
+
+### Add joi for validation with express-validation

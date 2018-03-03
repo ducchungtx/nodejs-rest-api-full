@@ -3,7 +3,9 @@
         [
             "env",
             {
-                "targets": "current"
+                "targets": {
+                    "node": "current"
+                }
             }
         ]
     ],

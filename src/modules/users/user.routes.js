@@ -1,0 +1,11 @@
+import { Router } from 'express';
+import validate from 'express-validation';
+
+import * as userController from './user.controllers';
+import userValidation from './user.validation';
+
+const routers = new Router();
+
+routers.post('/signup',validate(userValidation.signup), userController.signUp);
+
+export default routers;
