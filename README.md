@@ -27,8 +27,18 @@ yarn dev
 setup config folder, constants
 
 ## 3. Users creation
-### Create the user modal, controller and routes
+Create the user modal, controller and routes
 
-### Install Robomongo, Postman
+Install Robomongo, Postman
 
-### Add joi for validation with express-validation
+Add joi for validation with express-validation
+
+## 4. Add bcrypt and passport
+
+- Add rimraf and clean dist on webpack build
+yarn add -D rimraf
+- Cypt the user password
+yarn add bcrypt-nodejs
+- Create the LocalStrategy with passport
+yarn add passport passport-local
+- Can log a user

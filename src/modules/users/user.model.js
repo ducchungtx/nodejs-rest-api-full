@@ -1,5 +1,6 @@
 import mongoose, { Schema } from 'mongoose';
 import validator from 'validator';
+import { hashSync, compareSync } from 'bcrypt-nodejs';
 
 import { passwordReg } from './user.validation';
 
@@ -46,5 +47,21 @@ const UserScheme = new Schema({
         }
     }
 });
+
+UserScheme.pre('save', function(next) {
+    if(this.isModified('password')) {
+        this.password = this._hashPassword(this.password);
+    }
+    return next();
+})
+
+UserScheme.methods = {
+    _hashPassword(password) {
+        return hashSync(password);
+    },
+    authenticateUser(password) {
+        return compareSync(password, this.password)
+    }
+}
 
 export default mongoose.model('User', UserScheme);
