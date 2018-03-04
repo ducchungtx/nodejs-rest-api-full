@@ -37,8 +37,10 @@
     "express-validation": "^1.0.2",
     "helmet": "^3.12.0",
     "joi": "^13.1.2",
+    "jsonwebtoken": "^8.2.0",
     "mongoose": "^5.0.7",
     "passport": "^0.4.0",
+    "passport-jwt": "^3.0.1",
     "passport-local": "^1.0.0",
     "validator": "^9.4.1"
   },

@@ -1,11 +1,14 @@
 const devConfig = {
-    'MONGO_URL': 'mongodb://admin:123@ds153948.mlab.com:53948/nodejs-rest-api-full'
+    MONGO_URL: 'mongodb://admin:123@ds153948.mlab.com:53948/nodejs-rest-api-full',
+    JWT_SECRET: 'thisisascret'
 };
 const testConfig = {
-    'MONGO_URL': 'mongodb://admin:123@ds153948.mlab.com:53948/nodejs-rest-api-full'
+    MONGO_URL: 'mongodb://admin:123@ds153948.mlab.com:53948/nodejs-rest-api-full',
+    JWT_SECRET: 'thisisascret'
 };
 const prodConfig = {
-    'MONGO_URL': 'mongodb://admin:123@ds153948.mlab.com:53948/nodejs-rest-api-full'
+    MONGO_URL: 'mongodb://admin:123@ds153948.mlab.com:53948/nodejs-rest-api-full',
+    JWT_SECRET: 'thisisascret'
 };
 const defaultConfig = {
     PORT: process.env.PORT || 3000

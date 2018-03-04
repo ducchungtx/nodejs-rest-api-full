@@ -34,7 +34,6 @@ Install Robomongo, Postman
 Add joi for validation with express-validation
 
 ## 4. Add bcrypt and passport
-
 - Add rimraf and clean dist on webpack build
 yarn add -D rimraf
 - Cypt the user password
@@ -42,3 +41,9 @@ yarn add bcrypt-nodejs
 - Create the LocalStrategy with passport
 yarn add passport passport-local
 - Can log a user
+
+## 5. Add passport jwt and send less infomation about the user
+- Create a secret password for the jwt
+- Add passport-jwt and create the strategy
+- add jsonswebtoken library
+- How can I send less info to the front-end ? Like i don't want to send the password
