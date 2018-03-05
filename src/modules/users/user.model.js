@@ -2,6 +2,7 @@ import mongoose, { Schema } from 'mongoose';
 import validator from 'validator';
 import { hashSync, compareSync } from 'bcrypt-nodejs';
 import jwt from 'jsonwebtoken';
+import uniqueValidator from 'mongoose-unique-validator';
 
 import { passwordReg } from './user.validation';
 import constants from '../../config/constants';
@@ -48,6 +49,10 @@ const UserScheme = new Schema({
             message: '{VALUE} is not a valid password'
         }
     }
+}, { timestamps: true });
+
+UserScheme.plugin(uniqueValidator, {
+    message: '{VALUE} already taken!'
 });
 
 UserScheme.pre('save', function(next) {

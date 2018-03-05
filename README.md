@@ -47,3 +47,8 @@ yarn add passport passport-local
 - Add passport-jwt and create the strategy
 - add jsonswebtoken library
 - How can I send less info to the front-end ? Like i don't want to send the password
+
+## 6. Creation a post
+- Create the post model
+- Add the user id as the author
+- Resolve error I did with joi

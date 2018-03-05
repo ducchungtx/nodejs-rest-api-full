@@ -134,7 +134,43 @@ eval("\n\nvar _express = __webpack_require__(/*! express */ \"express\");\n\nvar
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-eval("\n\nObject.defineProperty(exports, \"__esModule\", {\n    value: true\n});\n\nvar _user = __webpack_require__(/*! ./users/user.routes */ \"./src/modules/users/user.routes.js\");\n\nvar _user2 = _interopRequireDefault(_user);\n\nvar _auth = __webpack_require__(/*! ../services/auth.services */ \"./src/services/auth.services.js\");\n\nfunction _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }\n\nexports.default = app => {\n    app.use('/api/v1/users', _user2.default);\n    app.use('/hello', _auth.authJwt, (req, res) => {\n        res.send('This is a private route!!!');\n    });\n};\n\n//# sourceURL=webpack:///./src/modules/index.js?");
+eval("\n\nObject.defineProperty(exports, \"__esModule\", {\n    value: true\n});\n\nvar _user = __webpack_require__(/*! ./users/user.routes */ \"./src/modules/users/user.routes.js\");\n\nvar _user2 = _interopRequireDefault(_user);\n\nvar _post = __webpack_require__(/*! ./posts/post.routes */ \"./src/modules/posts/post.routes.js\");\n\nvar _post2 = _interopRequireDefault(_post);\n\nfunction _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }\n\nexports.default = app => {\n    app.use('/api/v1/users', _user2.default);\n    app.use('/api/v1/posts', _post2.default);\n};\n\n//# sourceURL=webpack:///./src/modules/index.js?");
+
+/***/ }),
+
+/***/ "./src/modules/posts/post.controller.js":
+/*!**********************************************!*\
+  !*** ./src/modules/posts/post.controller.js ***!
+  \**********************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+eval("\n\nObject.defineProperty(exports, \"__esModule\", {\n    value: true\n});\nexports.createPost = createPost;\n\nvar _post = __webpack_require__(/*! ./post.model */ \"./src/modules/posts/post.model.js\");\n\nvar _post2 = _interopRequireDefault(_post);\n\nfunction _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }\n\nasync function createPost(req, res) {\n    try {\n        const post = await _post2.default.createPost(req.body, req.user._id);\n        return res.status(201).json(post);\n    } catch (e) {\n        return res.status(400).json(e);\n    }\n}\n\n//# sourceURL=webpack:///./src/modules/posts/post.controller.js?");
+
+/***/ }),
+
+/***/ "./src/modules/posts/post.model.js":
+/*!*****************************************!*\
+  !*** ./src/modules/posts/post.model.js ***!
+  \*****************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+eval("\n\nObject.defineProperty(exports, \"__esModule\", {\n    value: true\n});\n\nvar _mongoose = __webpack_require__(/*! mongoose */ \"mongoose\");\n\nvar _mongoose2 = _interopRequireDefault(_mongoose);\n\nvar _slug = __webpack_require__(/*! slug */ \"slug\");\n\nvar _slug2 = _interopRequireDefault(_slug);\n\nvar _mongooseUniqueValidator = __webpack_require__(/*! mongoose-unique-validator */ \"mongoose-unique-validator\");\n\nvar _mongooseUniqueValidator2 = _interopRequireDefault(_mongooseUniqueValidator);\n\nfunction _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }\n\nconst PostSchema = new _mongoose.Schema({\n    title: {\n        type: String,\n        trim: true,\n        required: [true, 'Title is required!'],\n        minlength: [3, 'Title need to be longer!'],\n        unique: true\n    },\n    text: {\n        type: String,\n        trim: true,\n        required: [true, 'Text is required!'],\n        minlength: [10, 'Text need to be longer!']\n    },\n    slug: {\n        type: String,\n        trim: true,\n        lowercase: true\n    },\n    user: {\n        type: _mongoose.Schema.ObjectId,\n        ref: 'User'\n    },\n    favoriteCount: {\n        type: Number,\n        default: 0\n    }\n}, { timestamps: true });\n\nPostSchema.plugin(_mongooseUniqueValidator2.default, {\n    message: '{VALUE} already taken!'\n});\n\nPostSchema.pre('validate', function (next) {\n    this._slugify();\n    next();\n});\n\nPostSchema.methods = {\n    _slugify() {\n        this.slug = (0, _slug2.default)(this.title);\n    }\n};\n\nPostSchema.statics = {\n    createPost(args, user) {\n        return this.create(Object.assign({}, args, {\n            user\n        }));\n    }\n};\n\nexports.default = _mongoose2.default.model('Post', PostSchema);\n\n//# sourceURL=webpack:///./src/modules/posts/post.model.js?");
+
+/***/ }),
+
+/***/ "./src/modules/posts/post.routes.js":
+/*!******************************************!*\
+  !*** ./src/modules/posts/post.routes.js ***!
+  \******************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+eval("\n\nObject.defineProperty(exports, \"__esModule\", {\n  value: true\n});\n\nvar _express = __webpack_require__(/*! express */ \"express\");\n\nvar _post = __webpack_require__(/*! ./post.controller */ \"./src/modules/posts/post.controller.js\");\n\nvar postController = _interopRequireWildcard(_post);\n\nvar _auth = __webpack_require__(/*! ../../services/auth.services */ \"./src/services/auth.services.js\");\n\nfunction _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }\n\nconst routes = new _express.Router();\nroutes.post('/', _auth.authJwt, postController.createPost);\n\nexports.default = routes;\n\n//# sourceURL=webpack:///./src/modules/posts/post.routes.js?");
 
 /***/ }),
 
@@ -158,7 +194,7 @@ eval("\n\nObject.defineProperty(exports, \"__esModule\", {\n    value: true\n});
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-eval("\n\nObject.defineProperty(exports, \"__esModule\", {\n    value: true\n});\n\nvar _mongoose = __webpack_require__(/*! mongoose */ \"mongoose\");\n\nvar _mongoose2 = _interopRequireDefault(_mongoose);\n\nvar _validator = __webpack_require__(/*! validator */ \"validator\");\n\nvar _validator2 = _interopRequireDefault(_validator);\n\nvar _bcryptNodejs = __webpack_require__(/*! bcrypt-nodejs */ \"bcrypt-nodejs\");\n\nvar _jsonwebtoken = __webpack_require__(/*! jsonwebtoken */ \"jsonwebtoken\");\n\nvar _jsonwebtoken2 = _interopRequireDefault(_jsonwebtoken);\n\nvar _user = __webpack_require__(/*! ./user.validation */ \"./src/modules/users/user.validation.js\");\n\nvar _constants = __webpack_require__(/*! ../../config/constants */ \"./src/config/constants.js\");\n\nvar _constants2 = _interopRequireDefault(_constants);\n\nfunction _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }\n\nconst UserScheme = new _mongoose.Schema({\n    email: {\n        type: String,\n        unique: true,\n        required: [true, 'Email is required'],\n        trim: true,\n        validate: {\n            validator(email) {\n                return _validator2.default.isEmail(email);\n            },\n            message: '{VALUE} is not a valid email'\n        }\n    },\n    firstName: {\n        type: String,\n        required: [true, 'First name is required'],\n        trim: true\n\n    },\n    lastName: {\n        type: String,\n        required: [true, 'Last name is required'],\n        trim: true\n    },\n    userName: {\n        type: String,\n        required: [true, 'Username is required'],\n        trim: true,\n        unique: true\n    },\n    password: {\n        type: String,\n        required: [true, 'Password is required'],\n        trim: true,\n        minlength: [6, 'Passwod need to be longer!'],\n        validate: {\n            validator(password) {\n                return _user.passwordReg.test(password);\n            },\n            message: '{VALUE} is not a valid password'\n        }\n    }\n});\n\nUserScheme.pre('save', function (next) {\n    if (this.isModified('password')) {\n        this.password = this._hashPassword(this.password);\n    }\n    return next();\n});\n\nUserScheme.methods = {\n    _hashPassword(password) {\n        return (0, _bcryptNodejs.hashSync)(password);\n    },\n    authenticateUser(password) {\n        return (0, _bcryptNodejs.compareSync)(password, this.password);\n    },\n    createToken() {\n        return _jsonwebtoken2.default.sign({\n            _id: this._id\n        }, _constants2.default.JWT_SECRET);\n    },\n    toJSON() {\n        return {\n            _id: this._id,\n            userName: this.userName,\n            token: `JWT ${this.createToken()}`,\n            email: this.email\n        };\n    }\n};\n\nexports.default = _mongoose2.default.model('User', UserScheme);\n\n//# sourceURL=webpack:///./src/modules/users/user.model.js?");
+eval("\n\nObject.defineProperty(exports, \"__esModule\", {\n    value: true\n});\n\nvar _mongoose = __webpack_require__(/*! mongoose */ \"mongoose\");\n\nvar _mongoose2 = _interopRequireDefault(_mongoose);\n\nvar _validator = __webpack_require__(/*! validator */ \"validator\");\n\nvar _validator2 = _interopRequireDefault(_validator);\n\nvar _bcryptNodejs = __webpack_require__(/*! bcrypt-nodejs */ \"bcrypt-nodejs\");\n\nvar _jsonwebtoken = __webpack_require__(/*! jsonwebtoken */ \"jsonwebtoken\");\n\nvar _jsonwebtoken2 = _interopRequireDefault(_jsonwebtoken);\n\nvar _mongooseUniqueValidator = __webpack_require__(/*! mongoose-unique-validator */ \"mongoose-unique-validator\");\n\nvar _mongooseUniqueValidator2 = _interopRequireDefault(_mongooseUniqueValidator);\n\nvar _user = __webpack_require__(/*! ./user.validation */ \"./src/modules/users/user.validation.js\");\n\nvar _constants = __webpack_require__(/*! ../../config/constants */ \"./src/config/constants.js\");\n\nvar _constants2 = _interopRequireDefault(_constants);\n\nfunction _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }\n\nconst UserScheme = new _mongoose.Schema({\n    email: {\n        type: String,\n        unique: true,\n        required: [true, 'Email is required'],\n        trim: true,\n        validate: {\n            validator(email) {\n                return _validator2.default.isEmail(email);\n            },\n            message: '{VALUE} is not a valid email'\n        }\n    },\n    firstName: {\n        type: String,\n        required: [true, 'First name is required'],\n        trim: true\n\n    },\n    lastName: {\n        type: String,\n        required: [true, 'Last name is required'],\n        trim: true\n    },\n    userName: {\n        type: String,\n        required: [true, 'Username is required'],\n        trim: true,\n        unique: true\n    },\n    password: {\n        type: String,\n        required: [true, 'Password is required'],\n        trim: true,\n        minlength: [6, 'Passwod need to be longer!'],\n        validate: {\n            validator(password) {\n                return _user.passwordReg.test(password);\n            },\n            message: '{VALUE} is not a valid password'\n        }\n    }\n}, { timestamps: true });\n\nUserScheme.plugin(_mongooseUniqueValidator2.default, {\n    message: '{VALUE} already taken!'\n});\n\nUserScheme.pre('save', function (next) {\n    if (this.isModified('password')) {\n        this.password = this._hashPassword(this.password);\n    }\n    return next();\n});\n\nUserScheme.methods = {\n    _hashPassword(password) {\n        return (0, _bcryptNodejs.hashSync)(password);\n    },\n    authenticateUser(password) {\n        return (0, _bcryptNodejs.compareSync)(password, this.password);\n    },\n    createToken() {\n        return _jsonwebtoken2.default.sign({\n            _id: this._id\n        }, _constants2.default.JWT_SECRET);\n    },\n    toJSON() {\n        return {\n            _id: this._id,\n            userName: this.userName,\n            token: `JWT ${this.createToken()}`,\n            email: this.email\n        };\n    }\n};\n\nexports.default = _mongoose2.default.model('User', UserScheme);\n\n//# sourceURL=webpack:///./src/modules/users/user.model.js?");
 
 /***/ }),
 
@@ -297,6 +333,17 @@ eval("module.exports = require(\"mongoose\");\n\n//# sourceURL=webpack:///extern
 
 /***/ }),
 
+/***/ "mongoose-unique-validator":
+/*!********************************************!*\
+  !*** external "mongoose-unique-validator" ***!
+  \********************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+eval("module.exports = require(\"mongoose-unique-validator\");\n\n//# sourceURL=webpack:///external_%22mongoose-unique-validator%22?");
+
+/***/ }),
+
 /***/ "morgan":
 /*!*************************!*\
   !*** external "morgan" ***!
@@ -338,6 +385,17 @@ eval("module.exports = require(\"passport-jwt\");\n\n//# sourceURL=webpack:///ex
 /***/ (function(module, exports) {
 
 eval("module.exports = require(\"passport-local\");\n\n//# sourceURL=webpack:///external_%22passport-local%22?");
+
+/***/ }),
+
+/***/ "slug":
+/*!***********************!*\
+  !*** external "slug" ***!
+  \***********************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+eval("module.exports = require(\"slug\");\n\n//# sourceURL=webpack:///external_%22slug%22?");
 
 /***/ }),
 
