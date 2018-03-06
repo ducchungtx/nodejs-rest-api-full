@@ -6,6 +6,11 @@ import { authJwt } from '../../services/auth.services';
 import postValidation from './post.validations';
 
 const routes = new Router();
-routes.post('/', authJwt, validate(postValidation.createPost) , postController.createPost);
+routes.post(
+    '/',
+    authJwt,
+    validate(postValidation.createPost),
+    postController.createPost,
+);
 
 export default routes;
