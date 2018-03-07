@@ -58,3 +58,7 @@ yarn add passport passport-local
 - Add http-status library
 - Populate User
 - User toAuthJSON vs toJSON
+
+## 8. Get all posts with a list static method
+- Create the controller
+- Create a list statics method on post
