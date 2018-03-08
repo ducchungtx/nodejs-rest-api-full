@@ -66,3 +66,8 @@ yarn add passport passport-local
 ## 9. Update post if author of it
 - Create route and controller
 - Create validation field
+
+## 10. Delete a post if author of it
+- Create the route and controller
+- Show the authorization work
+- Add prettier and show the magic
