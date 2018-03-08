@@ -62,3 +62,7 @@ yarn add passport passport-local
 ## 8. Get all posts with a list static method
 - Create the controller
 - Create a list statics method on post
+
+## 9. Update post if author of it
+- Create route and controller
+- Create validation field
