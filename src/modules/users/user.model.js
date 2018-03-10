@@ -8,73 +8,76 @@ import Post from '../posts/post.model';
 import { passwordReg } from './user.validation';
 import constants from '../../config/constants';
 
-const UserScheme = new Schema({
-    email: {
-        type: String,
-        unique: true,
-        required: [true, 'Email is required'],
-        trim: true,
-        validate: {
-            validator(email) {
-                return validator.isEmail(email);
+const UserSchema = new Schema(
+    {
+        email: {
+            type: String,
+            unique: true,
+            required: [true, 'Email is required!'],
+            trim: true,
+            validate: {
+                validator(email) {
+                    return validator.isEmail(email);
+                },
+                message: '{VALUE} is not a valid email!',
             },
-            message: '{VALUE} is not a valid email'
         },
-    },
-    firstName: {
-        type: String,
-        required: [true, 'First name is required'],
-        trim: true
-
-    },
-    lastName: {
-        type: String,
-        required: [true, 'Last name is required'],
-        trim: true
-    },
-    userName: {
-        type: String,
-        required: [true, 'Username is required'],
-        trim: true,
-        unique: true
-    },
-    password: {
-        type: String,
-        required: [true, 'Password is required'],
-        trim: true,
-        minlength: [6, 'Passwod need to be longer!'],
-        validate: {
-            validator(password) {
-                return passwordReg.test(password);
+        firstName: {
+            type: String,
+            required: [true, 'FirstName is required!'],
+            trim: true,
+        },
+        lastName: {
+            type: String,
+            required: [true, 'LastName is required!'],
+            trim: true,
+        },
+        userName: {
+            type: String,
+            required: [true, 'UserName is required!'],
+            trim: true,
+            unique: true,
+        },
+        password: {
+            type: String,
+            required: [true, 'Password is required!'],
+            trim: true,
+            minlength: [6, 'Password need to be longer!'],
+            validate: {
+                validator(password) {
+                    return passwordReg.test(password);
+                },
+                message: '{VALUE} is not a valid password!',
             },
-            message: '{VALUE} is not a valid password'
+        },
+        favorites: {
+            posts: [{
+                type: Schema.Types.ObjectId,
+                ref: 'Post'
+            }]
         }
     },
-    favorites: {
-        posts: [{
-            type: Schema.Types.ObjectId,
-            ref: 'Post'
-        }]
-    }
-}, { timestamps: true });
+    { timestamps: true },
+);
 
-UserScheme.plugin(uniqueValidator, {
-    message: '{VALUE} already taken!'
+UserSchema.plugin(uniqueValidator, {
+    message: '{VALUE} already taken!',
 });
 
-UserScheme.pre('save', function(next) {
-    if(this.isModified('password')) {
+UserSchema.pre('save', function(next) {
+    if (this.isModified('password')) {
         this.password = this._hashPassword(this.password);
     }
-    return next();
-})
 
-UserScheme.methods = {
+    return next();
+});
+
+UserSchema.methods = {
     _hashPassword(password) {
         return hashSync(password);
     },
     authenticateUser(password) {
-        return compareSync(password, this.password)
+        return compareSync(password, this.password);
     },
     createToken() {
         return jwt.sign(
@@ -88,18 +91,19 @@ UserScheme.methods = {
         return {
             _id: this._id,
             userName: this.userName,
-            token: `JWT ${this.createToken()}`
-        }
+            token: `JWT ${this.createToken()}`,
+        };
     },
     toJSON() {
         return {
             _id: this._id,
-            userName: this.userName
-        }
+            userName: this.userName,
+        };
     },
+
     _favorites: {
         async posts(postId) {
-            if(this.favorites.posts.indexOf(postId) >= 0) {
+            if (this.favorites.posts.indexOf(postId) >= 0) {
                 this.favorites.posts.remove(postId);
                 await Post.decFavoriteCount(postId);
             } else {
@@ -108,8 +112,15 @@ UserScheme.methods = {
             }
 
             return this.save();
+        },
+
+        isPostIsFavorite(postId) {
+            if (this.favorites.posts.indexOf(postId) >= 0) {
+                return true;
+            }
+            return false;
         }
     }
-}
+};
 
-export default mongoose.model('User', UserScheme);
+export default mongoose.model('User', UserSchema);
