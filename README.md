@@ -71,3 +71,7 @@ yarn add passport passport-local
 - Create the route and controller
 - Show the authorization work
 - Add prettier and show the magic
+
+## 11. User can favorite a post if author + increment the favoriteCount
+- Create model methods for both user and post
+- Add the increment/decrement
